@@ -1,3 +1,19 @@
+function escapeHtml(unsafe) {
+    return unsafe
+         .replace(/&/g, "")
+        //  .replace(/</g, "")
+        //  .replace(/>/g, "")
+         .replace(/"/g, "")
+         .replace(/'/g, "")
+         .replace(/http:/g, "")
+         .replace(/https:/g, "")
+         .replace(/src=/g, "")
+         .replace(/srcs=/g, "")
+         .replace(/source=/g, "")
+         .replace(/script/g, "")
+         .replace(/=/g, "");
+ }
+
 $(function() {
 	window.addEventListener('message', function(event) {
 		switch (event.data.action) {
@@ -26,11 +42,12 @@ $(function() {
 				break;
 
 			case 'updatePlayerList':
-				$('.playerlist tr:gt(0)').remove();
-				$('.playerlist').append(event.data.players);
-				applyPingColor();
-				sortPlayerList();
-				break;
+					$('#playerlist tr:gt(0)').remove();
+					var name = escapeHtml(event.data.players)
+					$('#playerlist').append(name);
+					applyPingColor();
+					
+					break;
 
 			case 'updatePing':
 				updatePing(event.data.players);
